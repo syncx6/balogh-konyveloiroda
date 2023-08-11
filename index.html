@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <title>Névjegykártya</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <img id="profil_pic" src="https://i.imgur.com/UIAyOwE.jpg" alt="Profilkép">
+      <h1>Balogh I. Balázs <br> </h1>
+      <p id="job">Balogh Adó-szaktanácsadó és Könyvelőiroda </p>
+    </div>
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="fa fa-phone" aria-hidden="true"></i>
+        </div>
+        <p class="contact-value"> <a href="tel:+36301578855" target="blank">+36301578855</a></p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="fa fa-envelope-o" aria-hidden="true"></i>
+        </div>
+        <p class="contact-value">  <a href="mailto:iroda.baloghkft@gmail.com" target="blank">iroda.baloghkft@gmail.com</a> </p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="fa fa-globe" aria-hidden="true"></i>
+        </div>
+        <p class="contact-value">  <a href="https://baloghaccounting.hu/" target="blank">https://baloghaccounting.hu/ </a> </p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <i class="fa fa-map-marker"></i>
+        </div>
+        <p class="contact-value"> <a href="https://maps.app.goo.gl/5nLdeqLGgfxVyu8v6?g_st=ic" target="blank">Hungary</a></p>
+      </div>
+    </div>
+    <div class="social-links">
+      <a href="https://m.facebook.com/BBEgyeniKonyvelo" target="_blank" class="fa fa-facebook"></a>
+      <a href="https://www.linkedin.com/in/istv%C3%A1n-bal%C3%A1zs-balogh-b55b0b1b2/" target="_blank" class="fa fa-linkedin" aria-hidden="true"></a>
+      <a href="https://t.me/Balogh_Kft" target="_blank" class="fa fa-telegram"></a>
+      <a href="#" class="fa fa-download" aria-hidden="true" onclick="downloadVCard()"></a>
+    </div>
+  </div>
+
+  <script>
+    // Function to encode the image as base64
+    function toBase64(url, callback) {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          callback(reader.result);
+        };
+        reader.readAsDataURL(xhr.response);
+      };
+      xhr.open('GET', url);
+      xhr.responseType = 'blob';
+      xhr.send();
+    }
+
+    // Function to generate the vCard data
+    function generateVCard() {
+      const vcardData = `BEGIN:VCARD
+VERSION:3.0
+FN:Balogh István Balázs
+ORG:Balogh Adó-szaktanácsadó és Könyvelőiroda
+TEL:+36301578855
+EMAIL:iroda.baloghkft@gmail.com
+URL:https://baloghaccounting.hu/
+ADR:Hungary
+END:VCARD`;
+
+      return vcardData;
+    }
+
+    // Function to initiate the vCard download
+    function downloadVCard() {
+      const vcardData = generateVCard();
+
+      // Convert the image to base64
+      toBase64("https://i.imgur.com/Kht1jFu.jpg", function (imageData) {
+        const vcardDataWithImage = vcardData.replace("END:VCARD", `PHOTO;VALUE=URL:${imageData}\r\nEND:VCARD`);
+
+        const blob = new Blob([vcardDataWithImage], { type: 'text/vcard' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'Balogh_Istvan_Balazs.vcf'; // You can change the filename if needed
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      });
+    }
+  </script>
+</body>
+</html>
